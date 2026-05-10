@@ -14,7 +14,7 @@ import uvicorn
 from processor import process_files, load_data
 
 # ── CONFIG ──────────────────────────────────────────────────────────────────
-ADMIN_USER     = os.getenv("ADMIN_USER", "anass")
+ADMIN_USER     = os.getenv("ADMIN_USER", "Madid")
 ADMIN_PASS     = os.getenv("ADMIN_PASS", "primrose2025")
 VIEWER_PASS    = os.getenv("VIEWER_PASS", "direction2025")
 DATA_DIR       = Path("data")
@@ -74,7 +74,7 @@ async def get_dashboard(user: str = Depends(verify_viewer)):
 
 @app.get("/admin", response_class=HTMLResponse)
 async def get_admin(user: str = Depends(verify_admin)):
-    """Page d'administration pour Anass"""
+    """Page d'administration pour Madid"""
     log = {}
     if UPLOAD_LOG.exists():
         log = json.loads(UPLOAD_LOG.read_text())
@@ -157,7 +157,7 @@ def get_landing_page():
   <h1>PRIM'ROSE RH</h1>
   <div class="sub">Tableau de Bord RH — Azemmour</div>
   <a href="/dashboard" class="btn btn-green">📊 Voir le Dashboard</a>
-  <a href="/admin" class="btn btn-gold">⚙️ Admin (Anass)</a>
+  <a href="/admin" class="btn btn-gold">⚙️ Admin (Madid)</a>
 </div>
 </body>
 </html>"""
@@ -170,7 +170,7 @@ def no_data_page():
 h2{color:#3a6b35}p{color:#6b7f69}</style></head>
 <body><div class="box"><div style="font-size:50px">📋</div>
 <h2>Pas encore de données</h2>
-<p>Anass doit uploader les fichiers Excel BeeOne<br>via la page d'administration.</p>
+<p>Madid doit uploader les fichiers Excel BeeOne<br>via la page d'administration.</p>
 <a href="/admin" style="background:#e8a020;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">
 Aller à l'administration</a></div></body></html>"""
 
