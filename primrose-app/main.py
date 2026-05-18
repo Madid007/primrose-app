@@ -165,9 +165,32 @@ async def upload_files(
                "campagne": campagne, "quinzaine": quinzaine,
                "paie_file": paie_file.filename, "prod_file": prod_file.filename}
         UPLOAD_LOG.write_text(json.dumps(log, ensure_ascii=False))
-        return JSONResponse({"success": True, "message": f"Dashboard mis à jour — {campagne} {quinzaine}", "timestamp": log["last_upload"]})
+        return HTMLResponse(f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="refresh" content="2;url=/dashboard">
+<title>Mise à jour...</title>
+<style>body{{font-family:Arial;background:#f0f5ef;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}}
+.box{{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);max-width:380px;width:90%}}
+h2{{color:#3a6b35;margin:10px 0}}p{{color:#6b7f69}}</style></head>
+<body><div class="box">
+<div style="font-size:50px">✅</div>
+<h2>Dashboard mis à jour !</h2>
+<p>{campagne} — {quinzaine}</p>
+<p style="font-size:12px;margin-top:10px">Redirection automatique dans 2 secondes...</p>
+<a href="/dashboard" style="display:inline-block;margin-top:16px;background:#3a6b35;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">
+Voir le Dashboard →</a>
+</div></body></html>""")
     except Exception as e:
-        return JSONResponse({"error": str(e)}, status_code=500)
+        return HTMLResponse(f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Erreur</title>
+<style>body{{font-family:Arial;background:#fdecea;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}}
+.box{{background:#fff;border-radius:16px;padding:40px;text-align:center;max-width:380px;width:90%}}
+h2{{color:#c0392b}}</style></head>
+<body><div class="box"><div style="font-size:50px">❌</div>
+<h2>Erreur de traitement</h2>
+<p style="color:#666;font-size:13px">{str(e)}</p>
+<a href="/admin" style="display:inline-block;margin-top:16px;background:#e8a020;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">
+← Réessayer</a></div></body></html>""", status_code=500)
  
 @app.get("/health")
 async def health():
@@ -248,24 +271,31 @@ select{{width:100%;padding:10px 12px;border:1.5px solid #d4e4d2;border-radius:10
  
 <div class="card">
   <h2>⬆️ Mettre à jour</h2>
-  <form id="frm">
+  <form method="POST" action="/upload" enctype="multipart/form-data">
     <div class="field"><label>Campagne</label>
-      <select name="campagne"><option value="C2526">C2526 (2025-2026)</option><option value="C2425">C2425 (2024-2025)</option></select>
+      <select name="campagne" style="width:100%;padding:10px;border:2px solid #d4e4d2;border-radius:10px;font-size:14px;font-family:inherit;background:#f9fbf9">
+        <option value="C2526">C2526 (2025-2026)</option>
+        <option value="C2425">C2425 (2024-2025)</option>
+      </select>
     </div>
-    <div class="field"><label>Quinzaine</label><select name="quinzaine">{opts}</select></div>
-    <div class="field"><label>📋 Fichier Paie (BeeOne)</label>
-      <div class="zone"><input type="file" name="paie_file" required onchange="sf(this,'p')">
-        <div class="ico">📄</div><div class="lbl">Etat de paie</div><div class="fn" id="fp"></div>
-      </div>
+    <div class="field"><label>Quinzaine</label>
+      <select name="quinzaine" style="width:100%;padding:10px;border:2px solid #d4e4d2;border-radius:10px;font-size:14px;font-family:inherit;background:#f9fbf9">
+        {opts}
+      </select>
     </div>
-    <div class="field"><label>🌱 Fichier Production</label>
-      <div class="zone"><input type="file" name="prod_file" required onchange="sf(this,'r')">
-        <div class="ico">📊</div><div class="lbl">Tableau production</div><div class="fn" id="fr"></div>
-      </div>
+    <div class="field">
+      <label>📋 Fichier Paie (BeeOne)</label>
+      <input type="file" name="paie_file" required
+        style="width:100%;padding:12px;border:2px solid #d4e4d2;border-radius:10px;font-size:13px;background:#fff;font-family:inherit;display:block">
+      <div style="font-size:11px;color:#6b7f69;margin-top:4px">Sélectionnez le fichier Excel état de paie</div>
     </div>
-    <button type="submit" class="btn" id="sb">🔄 Mettre à jour le Dashboard</button>
-    <div class="prog" id="prog"><div class="bar" id="bar"></div></div>
-    <div class="msg" id="msg"></div>
+    <div class="field">
+      <label>🌱 Fichier Production</label>
+      <input type="file" name="prod_file" required
+        style="width:100%;padding:12px;border:2px solid #d4e4d2;border-radius:10px;font-size:13px;background:#fff;font-family:inherit;display:block">
+      <div style="font-size:11px;color:#6b7f69;margin-top:4px">Sélectionnez le fichier Excel production</div>
+    </div>
+    <button type="submit" class="btn" style="margin-top:8px">🔄 Mettre à jour le Dashboard</button>
   </form>
 </div>
  
