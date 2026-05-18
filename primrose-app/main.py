@@ -254,12 +254,12 @@ select{{width:100%;padding:10px 12px;border:1.5px solid #d4e4d2;border-radius:10
     </div>
     <div class="field"><label>Quinzaine</label><select name="quinzaine">{opts}</select></div>
     <div class="field"><label>📋 Fichier Paie (BeeOne)</label>
-      <div class="zone"><input type="file" name="paie_file" accept=".xlsx,.xls" required onchange="sf(this,'p')">
+      <div class="zone"><input type="file" name="paie_file" required onchange="sf(this,'p')">
         <div class="ico">📄</div><div class="lbl">Etat de paie</div><div class="fn" id="fp"></div>
       </div>
     </div>
     <div class="field"><label>🌱 Fichier Production</label>
-      <div class="zone"><input type="file" name="prod_file" accept=".xlsx,.xls" required onchange="sf(this,'r')">
+      <div class="zone"><input type="file" name="prod_file" required onchange="sf(this,'r')">
         <div class="ico">📊</div><div class="lbl">Tableau production</div><div class="fn" id="fr"></div>
       </div>
     </div>
